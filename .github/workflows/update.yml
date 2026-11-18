@@ -6,12 +6,10 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write   # publishes to the gh-pages branch
 
 concurrency:
-  group: pages
+  group: update-site
   cancel-in-progress: false
 
 jobs:
@@ -62,16 +60,12 @@ jobs:
           path: data
           key: landscout-data-${{ github.run_id }}
 
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Publish to the gh-pages branch (replaces the previous version, so the repo stays small)
+        working-directory: _site
+        run: |
+          git init -q -b gh-pages
+          git config user.name "land-scout-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Update listings $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" gh-pages
