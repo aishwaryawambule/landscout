@@ -1,0 +1,29 @@
+name: Report a listing
+description: A plot is sold, has wrong details, or is yours and you want it removed.
+title: "Listing #"
+labels: [listing]
+body:
+  - type: input
+    id: listing
+    attributes:
+      label: Listing number
+      description: Shown on the plot page, for example #10138. Or paste the page link.
+    validations:
+      required: true
+  - type: dropdown
+    id: problem
+    attributes:
+      label: What's wrong?
+      options:
+        - It's sold or no longer available
+        - The price is wrong
+        - The size, road or location is wrong
+        - It's my listing and I want it removed
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: Anything that helps us fix it. Please don't post phone numbers or documents here; this page is public.

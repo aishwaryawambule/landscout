@@ -1,0 +1,15 @@
+name: Feedback or a problem with the site
+description: Something doesn't work, is confusing, or could be better.
+labels: [feedback]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, or what would you like?
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Phone or computer, and browser
+      placeholder: e.g. Android phone, Chrome

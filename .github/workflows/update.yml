@@ -12,6 +12,13 @@ concurrency:
   group: update-site
   cancel-in-progress: false
 
+env:
+  # Settings (Settings > Secrets and variables > Actions). All optional.
+  SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+  REPORT_URL: ${{ github.server_url }}/${{ github.repository }}/issues
+  CONTACT_EMAIL: ${{ vars.CONTACT_EMAIL }}        # variable: shown on the About page
+  TELEGRAM_CHANNEL: ${{ vars.TELEGRAM_CHANNEL }}  # variable: e.g. @landscoutnepal
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -53,13 +60,6 @@ jobs:
           DATA_DIR: ${{ github.workspace }}/data
         run: python -m landscout build-site ${{ github.workspace }}/_site --root /landscout/
 
-      - name: Keep data for the next run
-        if: always()
-        uses: actions/cache/save@v4
-        with:
-          path: data
-          key: landscout-data-${{ github.run_id }}
-
       - name: Publish to the gh-pages branch (replaces the previous version, so the repo stays small)
         working-directory: _site
         run: |
@@ -69,3 +69,19 @@ jobs:
           git add -A
           git commit -q -m "Update listings $(date -u +%Y-%m-%dT%H:%MZ)"
           git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" gh-pages
+
+      - name: Post new plots to the Telegram channel
+        if: env.TELEGRAM_CHANNEL != ''
+        working-directory: code
+        continue-on-error: true
+        env:
+          DATA_DIR: ${{ github.workspace }}/data
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        run: sleep 90 && python -m landscout post-channel   # let Pages publish the new photos first
+
+      - name: Keep data for the next run
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: data
+          key: landscout-data-${{ github.run_id }}
