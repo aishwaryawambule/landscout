@@ -51,7 +51,7 @@ jobs:
         continue-on-error: true
         env:
           DATA_DIR: ${{ github.workspace }}/data
-          MAX_DETAILS_PER_RUN: "600"
+          MAX_DETAILS_PER_RUN: "1200"
         run: python -m landscout scan
 
       - name: Build the website
