@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en" data-root="/landscout/" class="js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Land area converter · Land Scout</title>
+<meta name="description" content="Find residential land for sale in Kathmandu, Lalitpur and Bhaktapur within your budget. See what your money buys near the city or in the outskirts, distance to the main road, schools, hospitals and greenery.">
+<link rel="icon" href="/landscout/static/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/landscout/static/app.css?v=527f9c067a">
+<link rel="alternate" type="application/atom+xml" title="New plots" href="/landscout/feed.xml">
+
+</head>
+<body class="">
+<header class="site-header">
+  <div class="hwrap">
+    <a class="logo" href="/landscout/" aria-label="Land Scout home"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24 L12 13 L17 19 L21 15 L29 24 Z" fill="#2f7d4f"/><circle cx="23" cy="8" r="3" fill="#e9a326"/></svg><span>Land Scout</span></a>
+    <nav class="hnav">
+      <a href="/landscout/saved/" id="saved-link" hidden>Saved (<span>0</span>)</a>
+      
+      <a href="/landscout/guide/">Buying guide</a>
+    </nav>
+  </div>
+</header>
+<div class="page">
+  
+<article class="prose">
+  <h1>Land area converter</h1>
+  <p>Kathmandu valley land is measured in ropani, aana, paisa and dam. 1 ropani = 16 aana, 1 aana = 4 paisa, 1 paisa = 4 dam. 1 aana is 342.25 sq ft (31.8 sq m).</p>
+  <form class="convert" id="conv" onsubmit="return false">
+    <div class="rapd">
+      <label>Ropani<input type="number" min="0" name="r" value="0"></label>
+      <label>Aana<input type="number" min="0" name="a" value="4"></label>
+      <label>Paisa<input type="number" min="0" name="p" value="0"></label>
+      <label>Dam<input type="number" min="0" name="d" value="0"></label>
+    </div>
+    <p class="or">or</p>
+    <div class="rapd two">
+      <label>Square feet<input type="number" min="0" name="sqft"></label>
+      <label>Square metres<input type="number" min="0" name="sqm"></label>
+    </div>
+  </form>
+  <p class="result" id="conv-out" aria-live="polite"></p>
+</article>
+
+  <footer class="site">
+    <nav aria-label="About this site"><a href="/landscout/about/">About Land Scout</a><a href="/landscout/guide/">Before you buy land</a><a href="/landscout/convert/">Area converter</a><a href="/landscout/terms/">Terms</a><a href="/landscout/privacy/">Privacy</a><a href="https://github.com/aishwaryawambule/landscout/issues/new/choose" target="_blank" rel="noopener">Report a problem</a></nav>
+    <p>Listings come from nepalhomes.com and gharghaderi.com and link back to the original. We are not a broker and take no commission.</p>
+  </footer>
+</div>
+<script src="/landscout/static/site.js?v=527f9c067a"></script>
+
+<script>
+(() => {
+  const f = document.getElementById('conv'), out = document.getElementById('conv-out');
+  const SQFT = 342.25, SQM = 31.7969;
+  const show = aana => {
+    let dam = Math.round(aana * 16), r = Math.floor(dam / 256); dam -= r * 256;
+    const a = Math.floor(dam / 16); dam -= a * 16; const p = Math.floor(dam / 4), d = dam - p * 4;
+    out.textContent = `${aana.toFixed(2)} aana = ${r}-${a}-${p}-${d} (ropani-aana-paisa-dam) = ${Math.round(aana * SQFT).toLocaleString()} sq ft = ${Math.round(aana * SQM).toLocaleString()} sq m`;
+    return {r, a, p, d};
+  };
+  f.addEventListener('input', e => {
+    const v = n => +f.elements[n].value || 0;
+    if (['r', 'a', 'p', 'd'].includes(e.target.name)) {
+      const aana = v('r') * 16 + v('a') + v('p') / 4 + v('d') / 16;
+      f.elements.sqft.value = Math.round(aana * SQFT); f.elements.sqm.value = Math.round(aana * SQM); show(aana);
+    } else {
+      const aana = e.target.name === 'sqft' ? v('sqft') / SQFT : v('sqm') / SQM;
+      const parts = show(aana);
+      for (const k of ['r', 'a', 'p', 'd']) f.elements[k].value = parts[k];
+      if (e.target.name === 'sqft') f.elements.sqm.value = Math.round(aana * SQM); else f.elements.sqft.value = Math.round(aana * SQFT);
+    }
+  });
+  f.elements.a.dispatchEvent(new Event('input', {bubbles: true}));
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en" data-root="/landscout/" class="js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Land Scout: land for sale in the Kathmandu valley</title>
+<meta name="description" content="Find residential land for sale in Kathmandu, Lalitpur and Bhaktapur within your budget. See what your money buys near the city or in the outskirts, distance to the main road, schools, hospitals and greenery.">
+<link rel="icon" href="/landscout/static/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/landscout/static/app.css?v=527f9c067a">
+<link rel="alternate" type="application/atom+xml" title="New plots" href="/landscout/feed.xml">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+</head>
+<body class="search-page">
+<header class="site-header">
+  <div class="hwrap">
+    <a class="logo" href="/landscout/" aria-label="Land Scout home"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24 L12 13 L17 19 L21 15 L29 24 Z" fill="#2f7d4f"/><circle cx="23" cy="8" r="3" fill="#e9a326"/></svg><span>Land Scout</span></a>
+    <nav class="hnav">
+      <a href="/landscout/saved/" id="saved-link" hidden>Saved (<span>0</span>)</a>
+      
+      <a href="/landscout/guide/">Buying guide</a>
+    </nav>
+  </div>
+</header>
+<div class="page">
+  
+<div id="search-page">
+<div class="intro">
+  <h1>Land for sale in the Kathmandu valley</h1>
+  <p class="intro-sub">Pick your budget and what you need. Listings from nepalhomes.com and gharghaderi.com, updated every few hours.</p>
+  
+</div>
+
+<form id="ff" class="filterbar" aria-label="Filters" onsubmit="return false">
+  <button type="button" class="filters-open" id="filters-open" aria-expanded="false">Filters</button>
+  <div class="fields" id="fields">
+    <div class="sheet-head"><b>Filters</b><button type="button" class="x" id="filters-close" aria-label="Close filters">×</button></div>
+    <label class="field"><span>Budget</span>
+      <select name="budget">
+        <option value="10">Up to रु. 10 Lakh</option><option value="20">Up to रु. 20 Lakh</option><option value="30">Up to रु. 30 Lakh</option><option value="50">Up to रु. 50 Lakh</option><option value="75">Up to रु. 75 Lakh</option><option value="100">Up to रु. 1 Crore</option><option value="150">Up to रु. 1 Crore 50 Lakh</option><option value="200">Up to रु. 2 Crore</option><option value="300">Up to रु. 3 Crore</option><option value="500">Up to रु. 5 Crore</option>
+        <option value="">Any budget</option>
+      </select></label>
+    <label class="field"><span>Size</span>
+      <select name="aana">
+        <option value="2">2 aana or more</option><option value="3">3 aana or more</option><option value="4">4 aana or more</option><option value="5">5 aana or more</option><option value="6">6 aana or more</option><option value="8">8 aana or more</option><option value="16">1 ropani or more</option>
+        <option value="">Any size</option>
+      </select></label>
+    <label class="field"><span>District</span>
+      <select name="area">
+        <option value="valley" data-label="All three districts">All three districts</option>
+        <option value="Kathmandu" data-label="Kathmandu">Kathmandu</option><option value="Lalitpur" data-label="Lalitpur">Lalitpur</option><option value="Bhaktapur" data-label="Bhaktapur">Bhaktapur</option>
+      </select></label>
+    <label class="field"><span>Distance from city</span>
+      <select name="city">
+        <option value="any" data-label="Any distance">Any distance</option>
+        <option value="near" data-label="Near the city (under 5 km)">Near the city (under 5 km)</option>
+        <option value="edge" data-label="Edge of the city (5–10 km)">Edge of the city (5–10 km)</option>
+        <option value="out" data-label="Outskirts (10 km+)">Outskirts (10 km+)</option>
+      </select></label>
+    <label class="field"><span>Main road</span>
+      <select name="mainroad">
+        <option value="any" data-label="Doesn't matter">Doesn't matter</option>
+        <option value="off" data-label="Not on a main road">Not on a main road</option>
+        <option value="walk" data-label="Main road within a walk">Main road within a walk</option>
+        <option value="far" data-label="Far from main roads">Far from main roads</option>
+      </select></label>
+    <fieldset class="field nearby"><legend>Nearby</legend>
+      <label class="check"><input type="checkbox" name="school" value="1"> School <small data-c="school"></small></label>
+      <label class="check"><input type="checkbox" name="health" value="1"> Hospital or clinic <small data-c="health"></small></label>
+      <label class="check"><input type="checkbox" name="shops" value="some"> Shops <small data-c="shops"></small></label>
+      <label class="check"><input type="checkbox" name="green" value="some"> Fields or trees <small data-c="green"></small></label>
+    </fieldset>
+    <details class="field more"><summary>More options</summary>
+      <div class="moregrid">
+        <label class="field"><span>Road width</span><select name="lane_min">
+          <option value="">Any width</option><option value="10">10 ft or wider</option><option value="13">13 ft or wider</option><option value="20">20 ft or wider</option></select></label>
+        <label class="field"><span>Listed</span><select name="age">
+          <option value="any">Any time</option><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="180">Last 6 months</option></select></label>
+        <label class="field"><span>Place name</span><input type="text" name="q" placeholder="e.g. Godawari"></label>
+        <label class="check"><input type="checkbox" name="paved" value="1"> Black-topped road</label>
+        <label class="check"><input type="checkbox" name="photo" value="1"> Has a photo</label>
+        <label class="check"><input type="checkbox" name="pin" value="1"> Exact map location</label>
+      </div>
+    </details>
+    <div class="sheet-foot"><a href="?set=1" data-nav>Clear all</a><button type="submit" class="btn" id="show-n">Show plots</button></div>
+  </div>
+</form>
+
+<div class="sortrow"><label class="sortby"><span>Sort by</span><select id="sort">
+  <option value="best">Best match</option><option value="new">Newest</option><option value="cheap">Lowest price per aana</option><option value="big">Biggest plot</option>
+</select></label></div>
+
+<div id="results" class="loading" aria-live="polite"><p class="empty">Loading plots…</p></div>
+<button type="button" class="mapfab" id="maptoggle" aria-expanded="false">Map</button>
+</div>
+
+  <footer class="site">
+    <nav aria-label="About this site"><a href="/landscout/about/">About Land Scout</a><a href="/landscout/guide/">Before you buy land</a><a href="/landscout/convert/">Area converter</a><a href="/landscout/terms/">Terms</a><a href="/landscout/privacy/">Privacy</a><a href="https://github.com/aishwaryawambule/landscout/issues/new/choose" target="_blank" rel="noopener">Report a problem</a></nav>
+    <p>Listings come from nepalhomes.com and gharghaderi.com and link back to the original. We are not a broker and take no commission.</p>
+  </footer>
+</div>
+<script src="/landscout/static/site.js?v=527f9c067a"></script>
+
+</body>
+</html>
